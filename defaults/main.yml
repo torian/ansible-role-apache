@@ -16,9 +16,6 @@ apache_vhosts_enabled:       "{{apache_prefix}}/sites-enabled"
 apache_ssl_cipher_suite: ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
 apache_ssl_protocol:     all -SSLv2 -SSLv3
 
-apache_vhosts_disabled:
-  - 000-devault.conf
-
 apache_mods_enable:
   - ssl
   - rewrite
@@ -26,6 +23,7 @@ apache_mods_enable:
 apache_mods_disable: []
 
 # Apache Vhosts example
+#
 #apache_vhosts:
 #  - server_name: foo.bar
 #    server_admin: admin@foo.bar
@@ -62,7 +60,11 @@ apache_mods_disable: []
 #            Order Allow, Deny
 #            Allow from All
 #          </Location>
+
+apache_vhosts: []
+
+# List of vhosts that should be disabled
 #
-#    
+apache_vhosts_disabled: []
 
 # vi:ts=2:sw=2:et:ft=yaml
