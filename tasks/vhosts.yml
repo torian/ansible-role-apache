@@ -1,0 +1,32 @@
+---
+#
+# Apache configuration
+#
+
+- name: Vhosts
+  template:
+    src=vhost.conf.j2
+    dest="{{apache_vhosts_available}}/{{item.server_name}}.conf"
+    mode="0644"
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+- name: Enable Vhosts
+  file:
+    state="link"
+    src="{{apache_vhosts_available}}/{{item.server_name}}.conf"
+    dest="{{apache_vhosts_enabled}}/{{item.server_name}}.conf"
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+- name: Disable Vhosts
+  file:
+    state=absent
+    dest="{{apache_vhosts_enabled}}/{{item}}"
+  with_items: apache_vhosts_disabled
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+# vi:ts=2:sw=2:et:ft=yaml

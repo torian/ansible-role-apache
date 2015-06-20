@@ -1,0 +1,59 @@
+---
+#
+# Manage SSL configuration
+#
+
+- name: SSL directories
+  file:
+    state=directory
+    dest="{{apache_ssl_prefix}}"
+    owner="root"
+    group="{{apache_group}}"
+    mode="0750"
+
+- name: SSL Key file
+  copy:
+    dest="{{apache_ssl_prefix}}/{{item.server_name}}.key"
+    content="{{item.certs.key}}"
+    mode="640"
+    owner="root"
+    group"{{apache_group}}"
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+- name: SSL Public cert
+  copy:
+    dest="{{apache_ssl_prefix}}/{{item.server_name}}.crt"
+    content="{{item.certs.cert}}"
+    mode="640"
+    owner="root"
+    group"{{apache_group}}"
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+- name: SSL CA cert
+  copy:
+    dest="{{apache_ssl_prefix}}/{{item.server_name}}.ca"
+    content="{{item.certs.ca}}"
+    mode="644"
+    owner="root"
+    group"{{apache_group}}"
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+- name: SSL Chain cert
+  copy:
+    dest="{{apache_ssl_prefix}}/{{item.server_name}}.chain"
+    content="{{item.certs.chain}}"
+    mode="644"
+    owner="root"
+    group"{{apache_group}}"
+  when: item.certs.chain is defined
+  with_items: apache_vhosts
+  no_log: apache_tasks_quiet
+  notify: apache restart
+
+# vi:ts=2:sw=2:et:ft=yaml

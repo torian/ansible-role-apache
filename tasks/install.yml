@@ -1,0 +1,14 @@
+---
+
+- name: Update cache
+  apt:
+    update_cache=yes
+    cache_valid_time=3600
+
+- name: Install Apache
+  apt:
+    name="{{item}}"
+    state="present"
+  with_items: apache_packages
+
+# vi:ts=2:sw=2:et:ft=yaml

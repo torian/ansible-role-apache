@@ -1,0 +1,68 @@
+---
+
+apache_user:  www-data
+apache_group: www-data
+
+apache_packages:
+  - apache2
+  - apache2-utils
+
+apache_prefix:               /etc/apache2
+apache_ssl_prefix:           "{{apache_prefix}}/ssl"
+apache_vhosts_prefix:        "{{apache_prefix}}/sites-available"
+apache_vhosts_available:     "{{apache_prefix}}/sites-available"
+apache_vhosts_enabled:       "{{apache_prefix}}/sites-enabled"
+
+apache_ssl_cipher_suite: ECDH+AESGCM:DH+AESGCM:ECDH+AES256:DH+AES256:ECDH+AES128:DH+AES:ECDH+3DES:DH+3DES:RSA+AESGCM:RSA+AES:RSA+3DES:!aNULL:!MD5:!DSS
+apache_ssl_protocol:     all -SSLv2 -SSLv3
+
+apache_vhosts_disabled:
+  - 000-devault.conf
+
+apache_mods_enable:
+  - ssl
+  - rewrite
+
+apache_mods_disable: []
+
+# Apache Vhosts example
+#apache_vhosts:
+#  - server_name: foo.bar
+#    server_admin: admin@foo.bar
+#    server_aliases:
+#      - a.foo.bar
+#      - b.foo.bar
+#    document_root: /var/www/foo.bar/html
+#    ssl_enabled: true
+#    certs:
+#      # Certificates can be specified in a couple of different ways
+#      # Inline: (bad for your security)
+#      key: |
+#        ----- BEGIN -----
+#        ...
+#        ----- END   -----
+#      # From a vault var: (good for your security)
+#      cert:  {{vault_http_cert}}
+#      ca:    {{vault_http_ca}}
+#      # The chain is optional
+#      chain: {{vault_http_chain}}
+#
+# There are two special vars that allow you to specify a list of
+# Apache directives. There is one for http and another for https.
+# A useful scenario for having two different vars is when you want
+# to redirect everything to HTTPS:
+#
+#    additional_directives_http:
+#      - |
+#          Redirect / https://foo.bar/
+#     
+#    additional_directives_https:
+#      - |
+#          <Location /baz>
+#            Order Allow, Deny
+#            Allow from All
+#          </Location>
+#
+#    
+
+# vi:ts=2:sw=2:et:ft=yaml

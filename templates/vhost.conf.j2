@@ -1,0 +1,65 @@
+# << Ansible generated file >>
+
+<VirtualHost *:80>
+  ServerName  {{item.server_name}}
+{% if item.server_aliases is defined %}
+  {% for a in item.server_aliases %}
+  ServerAlias {{a}}
+  {% endfor %}
+{% endif %}
+{% if item.server_admin is defined %}
+  ServerAdmin {{item.server_admin}}
+{% endif %}
+
+  DocumentRoot {{item.document_root}}
+  <Directory {{item.document_root}}>
+    Options -Indexes +FollowSymLinks
+    Order allow,deny
+    Allow from all
+  </Directory>
+
+{% if item.additional_directives_http is defined %}
+  {% for d in item.additional_directives_http %}
+  {{d}}
+  {% endfor %}
+{% endif %}
+</VirtualHost>
+
+{% if item.ssl_enabled %}
+<VirtualHost *:443>
+  ServerName  {{item.server_name}}
+{% if item.server_aliases is defined %}
+  {% for a in item.server_aliases %}
+  ServerAlias {{a}}
+  {% endfor %}
+{% endif %}
+{% if item.server_admin is defined %}
+  ServerAdmin {{item.server_admin}}
+{% endif %}
+
+  DocumentRoot {{item.document_root}}
+  <Directory {{item.document_root}}>
+    Options -Indexes +FollowSymLinks
+    Order allow,deny
+    Allow from all
+  </Directory>
+         
+  SSLEngine on
+  SSLHonorCipherOrder On
+  SSLCipherSuite {{apache_ssl_cipher_suite}}
+  SSLProtocol    {{apache_ssl_protocol}}
+  
+  SSLCertificateKeyFile   {{apache_ssl_prefix}}/{{item.server_name}}.key
+  SSLCertificateFile      {{apache_ssl_prefix}}/{{item.server_name}}.crt
+  SSLCACertificateFile    {{apache_ssl_prefix}}/{{item.server_name}}.ca
+{% if item.certs.chain is defined %}
+  SSLCertificateChainFile {{apache_ssl_prefix}}/{{item.server_name}}.chain
+{% endif %}
+
+{% if item.additional_directives_https is defined %}
+  {% for d in item.additional_directives_https %}
+  {{d}}
+  {% endfor %}
+{% endif %}
+</VirtualHost>
+{% endif %}

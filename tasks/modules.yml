@@ -1,0 +1,11 @@
+---
+
+- name: Enabled Modules
+  command: "a2enmod {{item}}"
+  with_items: apache_mods_enable
+
+- name: Disable Modules
+  command: "a2dismod {{item}}"
+  with_items: apache_mods_disable
+
+# vi:ts=2:sw=2:et:ft=yaml
