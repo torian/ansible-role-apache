@@ -4,10 +4,10 @@ python:   "2.7"
 
 before_install:
   - sudo apt-get update -qq
+  - sudo apt-get remove -qq --purge apache2 apache2-utils
 
 install:
   - pip install ansible
-  - "printf '[defaults]\nroles_path = ../' > ansible.cfg"
 
 script:
   - ansible-playbook test/test.yml -i test/inventory --syntax-check 
